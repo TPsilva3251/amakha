@@ -34,7 +34,7 @@
                   <h5 class="card-title">Pedido :  {{ $pedido->id}}</h5>
                 </div>
                 <div class="col-lg-6">
-                    <h5 class="card-title">Criado em :  {{ $pedido->created_at->format('d/m/Y H:i')}}</h5>
+                    <h5 class="card-title">Criado em :  {{ $pedido->created_at->format('d/m/Y')}}</h5>
                 </div>
               </div>
               <div class="row">

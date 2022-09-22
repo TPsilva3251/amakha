@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Pedido;
 use App\Models\Produto;
 use App\Models\PedidoProduto;
+use App\Models\Cliente;
 
 class CarrinhoController extends Controller
 {
@@ -15,12 +16,14 @@ class CarrinhoController extends Controller
     private $pedido;
     private $produto;
     private $pedidoProduto;
+    private $cliente;
 
-    public function __construct(Pedido $pedido, Produto $produto, PedidoProduto $pedidoProduto)
+    public function __construct(Pedido $pedido, Produto $produto, PedidoProduto $pedidoProduto, Cliente $cliente)
     {
         $this->pedido        = $pedido;
         $this->produto       = $produto;
         $this->pedidoProduto = $pedidoProduto;
+        $this->cliente       =$cliente;
     }
     /**
      * Display a listing of the resource.
@@ -57,6 +60,7 @@ class CarrinhoController extends Controller
     public function store(Request $request)
     {
         $dataForm = $request->all();
+        dd($dataForm);
 
        $produto = $this->produto->find($dataForm['produto_id']);
        $user = auth()->user()->id;
@@ -149,7 +153,18 @@ class CarrinhoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, $cli)
+    {
+        $produto = $this->produto->find($id);
+        $user    = auth()->user();
+        $cliente = $this->cliente->find($cli);
+
+        if($produto):
+            return view('painel.produto.show', compact('produto', 'user', 'cliente'));
+        endif;
+    }
+
+    public function shown($id)
     {
         $produto = $this->produto->find($id);
         $user    = auth()->user();

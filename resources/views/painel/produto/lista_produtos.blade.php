@@ -1,7 +1,7 @@
-@extends('home')
-  <!-- JavaScript Bundle with Popper -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-<script type="text/javascript" src="/js/jquery.maskedinput-1.3.min.js"></script>
+{{-- @extends('home') --}}
+
+@extends('layouts.app')
+
 @section('content')
 
   <div class="container">
@@ -40,7 +40,7 @@
       Produtos <button type="button" class="btn btn-info" id="btnCreate" data-toggle="modal" data-target="#exampleModal">Novo</button>
       </div>
       <div class="card-body">
-        <table class="table table-striped">
+        <table class="table table-striped" id="form">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -82,7 +82,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Novo Produto</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -104,8 +104,7 @@
           <div class="row mt-4">
             <div class="col-lg-6">
               <label for="valor">Valor</label>
-              <input type="text" class="form-control" name="valor"  onkeypress="$(this).mask('R$ 999.990.00')" placeholder="Digite o valor (EX:. 59.99)">
-              {{-- <input type="text" name="preco" value="{{old('preco')}}" class="form-control" onkeypress="$(this).mask('R$ 999.990,00')" placeholder="Preço"> --}}
+              <input type="text" class="form-control" name="valor" placeholder="Digite o valor (EX:. 59.99)">
             </div>
             <div class="col-lg-6">
               <h5>Status de <b>Ativo</b></h5>
@@ -128,7 +127,5 @@
   </div>
 </div>
 </form>
-<script>
-    $('.dinheiro').mask('#,##0.00', {reverse: true});
-</script>
 @endsection
+

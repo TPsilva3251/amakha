@@ -36,7 +36,8 @@ Route::group([
     //Criando as ROTAS para o carrinho de compras
     Route::get('carrinho/index', 'CarrinhoController@index')->name('carrinho.index');
 
-    Route::get('carrinho/show/{value}', 'CarrinhoController@show')->name('carrinho.show');
+    Route::get('carrinho/show/{value}/{id?}', 'CarrinhoController@show')->name('carrinho.show');
+    Route::get('carrinho/shown/{value}', 'CarrinhoController@shown')->name('car.show');
     Route::post('carrinho/store', 'CarrinhoController@store')->name('carrinho.store');
 
     Route::delete('carrinho/remover', 'CarrinhoController@remover')->name('carrinho.remover');
@@ -44,4 +45,9 @@ Route::group([
 
     Route::post('concluir/compras', 'CarrinhoController@concluir')->name('concluir.compras');
     Route::get('compras', 'CarrinhoController@compras')->name('compras');
+
+    //Criando as Rotas para o Cliente
+    Route::get('/cliente', 'ClienteController@index')->name('cliente.index');
+    Route::post('/clientestore', 'ClienteController@store')->name('cliente.store');
+    Route::get('/clientecart/{id}', 'ClienteController@cart')->name('cliente.cart');
 });

@@ -30,15 +30,15 @@
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    <h3>Inicio</h3>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                
-                          
+
+
                           <ul class="navbar-nav mr-auto">
-                              
+
                             <li class="nav-item active">
                                 <a class="nav-link" href="{{route('produtos')}}">Loja <span class="sr-only">(current)</span></a>
                             </li>
@@ -50,18 +50,19 @@
                               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{route('produto.lista')}}">Protudo</a>
                                 <a class="dropdown-item" href="{{route('cupom.desconto.listar')}}">Cupom de descomto</a>
+                                <a class="dropdown-item" href="{{route('cliente.index')}}">Cliente</a>
                               </div>
                             </li>
-                            
+
                             <li class="nav-item active">
                                 <a class="nav-link" href="{{route('carrinho.index')}}">Carrinho Compras <span class="sr-only">(current)</span></a>
-                                
+
                             </li>
                                 <li class="nav-item active">
                                     <a class="nav-link" href="{{route('compras')}}">Compras <span class="sr-only">(current)</span></a>
                                 </li>
-                          </ul>  
-                    
+                          </ul>
+
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
