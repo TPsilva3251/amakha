@@ -25,7 +25,8 @@ Route::group([
     'middleware'=> 'auth',
     'namespace' => 'V1',
 ], function () {
-    Route::get('produtos', 'ProdutoController@listaProduto')->name('produtos');
+    Route::get('produtos/{id?}', 'ProdutoController@listaProdutos')->name('produtos');
+    Route::get('produto', 'ProdutoController@listaProduto')->name('produto');
     //Criando ROTA para o controller ProdutoController
     Route::get('produto/lista', 'ProdutoController@index')->name('produto.lista');
     Route::post('produto/store', 'ProdutoController@store')->name('produto.store');

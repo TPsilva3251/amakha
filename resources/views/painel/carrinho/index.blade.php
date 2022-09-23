@@ -27,16 +27,25 @@
   <div class="container">
       <div class="card">
           <h5 class="card-header">Produtos do carrinho </h5>
+          {{-- {{$cliente->nome}} --}}
           <div class="card-body">
             @forelse ($pedidos as $pedido)
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-3">
                   <h5 class="card-title">Pedido :  {{ $pedido->id}}</h5>
                 </div>
                 <div class="col-lg-6">
+                    <div class="card-title">
+                        @if (isset($cliente))
+                        <h5 class="card-title">Cliente :  {{ $cliente->nome}}</h5>
+                        <input type="hidden" name="clienteId" {{$cliente->id}}>
+                        @endif
+                    </div>
+                </div>
+                <div class="col-lg-3">
                     <h5 class="card-title">Criado em :  {{ $pedido->created_at->format('d/m/Y')}}</h5>
                 </div>
-              </div>
+            </div>
               <div class="row">
                   <table class="table table-striped">
                       <thead>
@@ -89,7 +98,12 @@
                     </table>
                     <hr>
                       <div class="col-lg-4">
-                        <a href="{{route('produtos')}}" id="btncont"><button class="btn btn-block btn-info">CONTINUAR COMPRANDO</button></a>
+                        @if (isset($cliente))
+                            <input type="hidden" name=""{{$cliente->id}}>
+                            <a href="{{route('produtos', $cliente->id)}}" id="btncont"><button class="btn btn-block btn-info">CONTINUAR COMPRANDO</button></a>
+                        @else
+                            <a href="{{route('produto')}}" id="btncont"><button class="btn btn-block btn-info">CONTINUAR COMPRANDO</button></a>
+                        @endif
                       </div>
                       <div class="col-lg-4">
                       <form action="{{route('concluir.compras')}}" method="POST">

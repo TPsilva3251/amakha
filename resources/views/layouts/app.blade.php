@@ -40,7 +40,7 @@
                           <ul class="navbar-nav mr-auto">
 
                             <li class="nav-item active">
-                                <a class="nav-link" href="{{route('produtos')}}">Loja <span class="sr-only">(current)</span></a>
+                                <a class="nav-link" href="{{route('produto')}}">Loja <span class="sr-only">(current)</span></a>
                             </li>
 
                             <li class="nav-item dropdown">

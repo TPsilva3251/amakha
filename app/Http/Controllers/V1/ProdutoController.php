@@ -5,14 +5,16 @@ namespace App\Http\Controllers\V1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Produto;
-
+use App\Models\Cliente;
 class ProdutoController extends Controller
 {
     private $produto;
+    private $cliente;
 
-    public function __construct(Produto $produto)
+    public function __construct(Produto $produto, Cliente $cliente)
     {
         $this->produto = $produto;
+        $this->cliente = $cliente;
     }
     /**
      * Display a listing of the resource.
@@ -23,7 +25,7 @@ class ProdutoController extends Controller
     {
 
         $produtos = $this->produto->all();
-        
+
         return view('painel.produto.lista_produtos', compact('produtos'));
     }
 
@@ -104,7 +106,17 @@ class ProdutoController extends Controller
         //
     }
 
-    public function listaProduto() 
+    public function listaProdutos($id)
+    {
+        $produtos = $this->produto->all();
+        // dd($id);
+        $cliente = $this->cliente->find($id);
+        // dd($clientes);
+
+        return view('painel.produto.index', compact('produtos','cliente'));
+    }
+
+    public function listaProduto()
     {
         $produtos = $this->produto->all();
 

@@ -23,7 +23,7 @@ class CarrinhoController extends Controller
         $this->pedido        = $pedido;
         $this->produto       = $produto;
         $this->pedidoProduto = $pedidoProduto;
-        $this->cliente       =$cliente;
+        $this->cliente       = $cliente;
     }
     /**
      * Display a listing of the resource.
@@ -33,11 +33,11 @@ class CarrinhoController extends Controller
     public function index()
     {
         $pedidos = $this->pedido
-                        ->where([
-                            'status'  => 'RE',
-                            'user_id' => auth()->user()->id
-                        ])->get();
-                            //dd( $pedidos[0]->pedido_protudos);
+            ->where([
+                'status'  => 'RE',
+                'user_id' => auth()->user()->id
+            ])->get();
+        //dd( $pedidos[0]->pedido_protudos);
         return view('painel.carrinho.index', compact('pedidos'));
     }
 
@@ -60,35 +60,67 @@ class CarrinhoController extends Controller
     public function store(Request $request)
     {
         $dataForm = $request->all();
-        dd($dataForm);
+        // dd($dataForm);
 
-       $produto = $this->produto->find($dataForm['produto_id']);
-       $user = auth()->user()->id;
+        $produto = $this->produto->find($dataForm['produto_id']);
 
-       $pedidoId = $this->pedido->consultaPedido([
-           'user_id' => $dataForm['user_id'],
-           'status'  => 'RE'
-       ]);
+        if (isset($dataForm['cliente_id'])) :
+            $cliente = $this->cliente
+                ->find($dataForm['cliente_id']);
+        //    dd($clientes);
+        endif;
 
-       if(empty($pedidoId)):
+        $user = auth()->user()->id;
 
-           $newPedido = $this->pedido->create([
-               'user_id' =>  $dataForm['user_id'],
-               'status'  => 'RE'
-           ]);
+        $pedidoId = $this->pedido->consultaPedido([
+            'user_id' => $dataForm['user_id'],
+            'status'  => 'RE'
+        ]);
+
+        if (empty($pedidoId)) :
+
+            $newPedido = $this->pedido->create([
+                'user_id' =>  $dataForm['user_id'],
+                'status'  => 'RE'
+            ]);
 
             $pedidoId = $newPedido->id;
+        // $clienteNome = $dataForm['cliente_nome'];
 
         endif;
 
-       $createPedidoProduto =  $this->pedidoProduto->create([
+        if (isset($dataForm['cliente_id'])) :
+            $createPedidoProduto =  $this->pedidoProduto->create([
+                'status'        => 'RE',
+                'valor'         =>  $produto->valor,
+                'produto_id'    =>  $produto->id,
+                'pedido_id'     =>  $pedidoId,
+                // 'cliente_nome'  =>  $clienteNome,
+            ]);
+
+            if ($createPedidoProduto) {
+                // dd("vai", $cliente);
+                session()->flash('success', 'PRODUTO ADICIONADO AO CARRINHO COM SUCESSO  .');
+                $pedidos = $this->pedido
+                    ->where([
+                        'status'  => 'RE',
+                        'user_id' => auth()->user()->id
+                    ])->get();
+                // dd( $pedidos[0]->pedido_protudos);
+                // dd($cliente);
+                return view('painel.carrinho.index', compact('pedidos', 'cliente'));
+            }
+
+        endif;
+
+        $createPedidoProduto =  $this->pedidoProduto->create([
             'status'        => 'RE',
             'valor'         =>  $produto->valor,
             'produto_id'    =>  $produto->id,
             'pedido_id'     =>  $pedidoId,
         ]);
 
-        if($createPedidoProduto){
+        if ($createPedidoProduto) {
             session()->flash('success', 'PRODUTO ADICIONADO AO CARRINHO COM SUCESSO  .');
             return redirect()->route('carrinho.index');
         }
@@ -98,7 +130,7 @@ class CarrinhoController extends Controller
     {
         $dataForm = $request->all();
 
-        $remove_apenas_item = (boolean)$dataForm['item'];
+        $remove_apenas_item = (bool)$dataForm['item'];
 
         $user = auth()->user();
 
@@ -110,7 +142,7 @@ class CarrinhoController extends Controller
 
         ]);
 
-        if(empty($pedido)) {
+        if (empty($pedido)) {
             session()->flash('error', 'Pedido não encontrado !');
             return redirect()->route('carrinho.listar');
         }
@@ -122,12 +154,12 @@ class CarrinhoController extends Controller
 
         $produto = $this->pedidoProduto->where($where_produto)->orderBy('id', 'desc')->first();
 
-        if(empty($produto->id)) {
+        if (empty($produto->id)) {
             session()->flash('error', 'Produto não encontrado no carrinho !');
             return redirect()->route('carrinho.listar');
         }
 
-        if($remove_apenas_item) {
+        if ($remove_apenas_item) {
             $where_produto['id'] = $produto->id;
         }
 
@@ -137,7 +169,7 @@ class CarrinhoController extends Controller
             'pedido_id' => $produto->pedido_id
         ])->exists();
 
-        if(!$check_pedido) {
+        if (!$check_pedido) {
             $this->pedido->where([
                 'id' => $produto->pedido_id
             ])->delete();
@@ -159,7 +191,7 @@ class CarrinhoController extends Controller
         $user    = auth()->user();
         $cliente = $this->cliente->find($cli);
 
-        if($produto):
+        if ($produto) :
             return view('painel.produto.show', compact('produto', 'user', 'cliente'));
         endif;
     }
@@ -169,7 +201,7 @@ class CarrinhoController extends Controller
         $produto = $this->produto->find($id);
         $user    = auth()->user();
 
-        if($produto):
+        if ($produto) :
             return view('painel.produto.show', compact('produto', 'user'));
         endif;
     }
@@ -215,42 +247,39 @@ class CarrinhoController extends Controller
     public function addProduto(Request $request)
     {
 
-       $dataForm = $request->all();
+        $dataForm = $request->all();
 
-       $produto = $this->produto->find($dataForm['id']);
+        $produto = $this->produto->find($dataForm['id']);
 
-       $user = auth()->user()->id;
+        $user = auth()->user()->id;
 
-       $pedidoId = $this->pedido->consultaPedido([
-        'user_id' => $user,
-        'status'  => 'RE'
-       ]);
-
-       if(empty($pedidoId)) {
-        $newPedido = $this->pedido->create([
+        $pedidoId = $this->pedido->consultaPedido([
             'user_id' => $user,
             'status'  => 'RE'
         ]);
 
-         $pedidoId = $newPedido->id;
+        if (empty($pedidoId)) {
+            $newPedido = $this->pedido->create([
+                'user_id' => $user,
+                'status'  => 'RE'
+            ]);
 
-       }
+            $pedidoId = $newPedido->id;
+        }
 
-       $createPedidoProduto =  $this->pedidoProduto->create([
-        'status'        => 'RE',
-        'valor'         =>  $produto->valor,
-        'produto_id'    =>  $produto->id,
-        'pedido_id'     =>  $pedidoId,
+        $createPedidoProduto =  $this->pedidoProduto->create([
+            'status'        => 'RE',
+            'valor'         =>  $produto->valor,
+            'produto_id'    =>  $produto->id,
+            'pedido_id'     =>  $pedidoId,
         ]);
 
         // dd($createPedidoProduto);
 
-        if($createPedidoProduto){
+        if ($createPedidoProduto) {
             session()->flash('success', 'PRODUTO ADICIONADO AO CARRINHO COM SUCESSO  .');
             return redirect()->route('carrinho.index');
         }
-
-
     }
 
     public function concluir(Request $request)
@@ -266,7 +295,7 @@ class CarrinhoController extends Controller
 
         ]);
 
-        if(!$check_pedido) {
+        if (!$check_pedido) {
             session()->flash('error', 'Pedido não encontrado !');
             return redirect()->route('carrinho.listar');
         }
@@ -275,7 +304,7 @@ class CarrinhoController extends Controller
             'pedido_id' => $dataForm['pedido_id']
         ])->exists();
 
-        if(!$check_produtos) {
+        if (!$check_produtos) {
             session()->flash('error', 'Produtos do pedido não encontrados  !');
             return redirect()->route('carrinho.listar');
         }

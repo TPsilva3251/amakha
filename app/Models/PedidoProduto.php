@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Produto;
+use App\Models\Cliente;
 
 class PedidoProduto extends Model
 {
@@ -12,5 +13,9 @@ class PedidoProduto extends Model
     public function produtos()
     {
         return $this->belongsTo(Produto::class, 'produto_id', 'id');
+    }
+    public function clientes()
+    {
+        return $this->belongsTo(Cliente::class);
     }
 }
