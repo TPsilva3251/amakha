@@ -85,17 +85,17 @@ class CarrinhoController extends Controller
             ]);
 
             $pedidoId = $newPedido->id;
-        // $clienteNome = $dataForm['cliente_nome'];
 
         endif;
-
+        // dd($dataForm);
         if (isset($dataForm['cliente_id'])) :
+            $clienteId = $dataForm['cliente_id'];
             $createPedidoProduto =  $this->pedidoProduto->create([
                 'status'        => 'RE',
                 'valor'         =>  $produto->valor,
                 'produto_id'    =>  $produto->id,
                 'pedido_id'     =>  $pedidoId,
-                // 'cliente_nome'  =>  $clienteNome,
+                'cliente_id'  =>  $clienteId,
             ]);
 
             if ($createPedidoProduto) {
@@ -286,6 +286,7 @@ class CarrinhoController extends Controller
     {
         $dataForm           = $request->all();
         $user               = auth()->user()->id;
+        // dd($dataForm);
 
         $check_pedido = $this->pedido->where([
 
@@ -338,6 +339,21 @@ class CarrinhoController extends Controller
             'status' => 'CA',
             'user_id'   =>  $user
         ])->orderBy('updated_at', 'desc')->get();
+
+        // $cliente =$this->pedidoProduto->all();
+        // $datas =  $this->pedidoProduto
+        // ->with('clientes')
+        // ->get();
+        // dd($datas);
+        // foreach($datas as $data)
+        // {
+        //     if(isset($data->clientes))
+        //     {
+        //         dd($data->clientes->nome);
+        //     }
+        // }
+
+        // dd($compras_pagas->pedido_produto_item);
 
         return view('painel.carrinho.compras', compact('compras_pagas', 'compras_canceladas'));
     }

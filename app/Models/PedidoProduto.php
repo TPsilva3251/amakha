@@ -8,14 +8,22 @@ use App\Models\Cliente;
 
 class PedidoProduto extends Model
 {
-    protected $fillable = ['status', 'valor', 'desconto', 'produto_id', 'pedido_id', 'cupom_desconto_id'];
+    protected $fillable = ['status', 'valor', 'desconto', 'produto_id', 'pedido_id', 'cupom_desconto_id','cliente_id'];
 
     public function produtos()
     {
         return $this->belongsTo(Produto::class, 'produto_id', 'id');
     }
+
     public function clientes()
     {
-        return $this->belongsTo(Cliente::class);
+        return $this->belongsTo(Cliente::class, 'cliente_id');
     }
+
+    // public function pedido_cliente()
+    // {
+    //     //
+    // }
+
+
 }

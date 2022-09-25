@@ -65,13 +65,13 @@
                         @foreach ($pedido->pedido_protudos as $pedidosProdutos )
                         <tr>
                           <th scope="row">
-                              <a href="#" onclick="carrinhoRemoverProduto({{$pedido->id}}, {{$pedidosProdutos->produto_id}}, 1)">
+                              {{-- <a href="#" onclick="carrinhoRemoverProduto({{$pedido->id}}, {{$pedidosProdutos->produto_id}}, 1)">
                                   <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                              </a>
+                              </a> --}}
                                 <span class="col-lg-4">{{ $pedidosProdutos->qtd }}</span>
-                              <a href="#" onclick="carrinhoAdicionarProduto({{$pedidosProdutos->produto_id}})">
+                              {{-- <a href="#" onclick="carrinhoAdicionarProduto({{$pedidosProdutos->produto_id}})">
                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                              </a>
+                              </a> --}}
                           </th>
                           <th>
                             {{$pedidosProdutos->produtos->nome}}
@@ -106,11 +106,20 @@
                         @endif
                       </div>
                       <div class="col-lg-4">
-                      <form action="{{route('concluir.compras')}}" method="POST">
-                        {!! csrf_field() !!}
-                          <input type="hidden" name="pedido_id" value="{{$pedido->id}}">
-                          <button class="btn btn-block btn-danger" type="submit">CONCLUIR COMPRAS</button>
-                        </form>
+                        @if (isset($cliente))
+                            <form action="{{route('concluir.compras')}}" method="POST">
+                                {!! csrf_field() !!}
+                                <input type="hidden" name="pedido_id" value="{{$pedido->id}} {{$cliente->id}}">
+                                <button class="btn btn-block btn-danger" type="submit">CONCLUIR COMPRAS</button>
+                            </form>
+                        @else
+                            <form action="{{route('concluir.compras')}}" method="POST">
+                                {!! csrf_field() !!}
+                                  <input type="hidden" name="pedido_id" value="{{$pedido->id}}">
+                                  <button class="btn btn-block btn-danger" type="submit">CONCLUIR COMPRAS</button>
+                            </form>
+                        @endif
+
                     </div>
                     <div class="jumbotron jumbotron-fluid col-lg-4">
                         <div class="container">
